@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Local LLM PDF Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Local LLM PDF Chat</h1>
+        <div class="upload-section">
+            <h2>Upload PDF</h2>
+            <input type="file" id="pdfInput" accept="application/pdf">
+            <button id="uploadBtn">Upload PDF</button>
+            <p id="uploadStatus"></p>
+        </div>
+        <div class="chat-section" style="display:none;">
+            <h2>Chat</h2>
+            <div id="chatWindow"></div>
+            <input type="text" id="chatInput" placeholder="Type your message...">
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
