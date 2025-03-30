@@ -26,7 +26,7 @@ A simple web app that allows you to chat with your PDF documents using Retrieval
 
 The system follows a modular architecture:
 
-
+![image](https://github.com/user-attachments/assets/6d8d6aa2-f815-417c-bbb5-bc61678dad7d)
 
 The application is built with a backend-frontend architecture:
 
@@ -42,7 +42,7 @@ Retrieval Augmented Generation (RAG) combines information retrieval with text ge
 
 ### RAG Process Flow:
 
-
+![image](https://github.com/user-attachments/assets/faa1a7d0-8094-4eb8-8c65-4e4d97fe979f)
 
 The diagram above illustrates the two main phases of the RAG process:
 
@@ -214,7 +214,7 @@ async def chat_with_pdf(request: ChatRequest):
 
 The application handles user sessions and data flow as follows:
 
-
+![image](https://github.com/user-attachments/assets/a1896992-9a8c-4705-b900-0a6896c46205)
 
 The diagram illustrates the complete lifecycle of a user interaction:
 
@@ -229,8 +229,6 @@ The diagram illustrates the complete lifecycle of a user interaction:
 9. Relevant context is retrieved from the vector store
 10. The context and question are sent to OpenAI to generate an answer
 11. Answer is returned to the user through the chat interface
-
-This architecture enables stateful conversations about document content while maintaining efficiency and responsiveness.
 
 ## 🛡 Technologies Used
 
