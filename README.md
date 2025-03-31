@@ -1,7 +1,7 @@
 # PDF RAG Chatbot System
 A simple web app that allows you to chat with your PDF documents using Retrieval Augmented Generation (RAG) technology. Upload any PDF and ask questions about its content to receive accurate, context-aware answers.
 
-![RAG Reader Preview](https://github.com/user-attachments/assets/73e4a4ed-c8af-47b9-9d0b-6cf378b3a832)
+<img src="https://github.com/user-attachments/assets/73e4a4ed-c8af-47b9-9d0b-6cf378b3a832" alt="RAG Reader Preview" width="550">
 
 ## 🚀 Features
 
@@ -16,7 +16,7 @@ A simple web app that allows you to chat with your PDF documents using Retrieval
 
 The system follows a modular architecture:
 
-![image](https://github.com/user-attachments/assets/4ff23087-8691-4bb4-9a72-161aa34ee90f)
+<img src="https://github.com/user-attachments/assets/4ff23087-8691-4bb4-9a72-161aa34ee90f" alt="System Architecture" width="500">
 
 The application is built with a backend-frontend architecture:
 
@@ -33,7 +33,7 @@ Retrieval Augmented Generation (RAG) combines information retrieval with text ge
 
 ### RAG Process Flow:
 
-![image](https://github.com/user-attachments/assets/c50d595b-febe-4797-8a65-36f97f97e244)
+<img src="https://github.com/user-attachments/assets/c50d595b-febe-4797-8a65-36f97f97e244" alt="RAG Process Flow" width="500">
 
 The diagram above illustrates the two main phases of the RAG process:
 
