@@ -3,8 +3,11 @@ uvicorn
 python-dotenv
 PyPDF2
 langchain
+langchain-openai
 openai
 faiss-cpu
 python-multipart
 langchain-community
 tiktoken
+pymongo
+certifi
