@@ -14,10 +14,6 @@ A simple web app that allows you to chat with your PDF documents using Retrieval
 
 ## 🏗 System Architecture
 
-The system follows a modular architecture:
-
-<img src="https://github.com/user-attachments/assets/4ff23087-8691-4bb4-9a72-161aa34ee90f" alt="System Architecture" width="500">
-
 The application is built with a backend-frontend architecture:
 
 1. **Frontend**: HTML/CSS/JS interface that users interact with to upload PDFs and ask questions
