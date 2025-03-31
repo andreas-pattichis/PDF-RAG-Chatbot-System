@@ -8,17 +8,20 @@ A simple web app that allows you to chat with your PDF documents using Retrieval
 - **Natural Language Queries**: Ask questions in plain English about your document
 - **Contextual Answers**: Get answers based on the content of your PDF
 - **Interactive UI**: Clean, responsive user interface for direct interaction
-- **Session Management**: Multiple document sessions without server restarts
+- **Session Management**: Multiple document sessions with persistent storage
+- **MongoDB Integration**: Store sessions for persistence across server restarts
 
 ## 📋 Table of Contents
 
 - [System Architecture](#-system-architecture)
 - [How RAG Works](#-how-rag-works)
 - [Setup Instructions](#-setup-instructions)
+- [MongoDB Setup](#-mongodb-setup)
 - [Usage Guide](#-usage-guide)
 - [Project Structure](#-project-structure)
 - [Key Components](#-key-components)
 - [Session Management](#-session-management)
+- [MongoDB Integration](#-mongodb-integration)
 - [Technologies Used](#-technologies-used)
 - [License](#-license)
 
@@ -35,6 +38,7 @@ The application is built with a backend-frontend architecture:
 3. **RAG Engine**: Processes PDFs, creates embeddings, and generates answers from queries
 4. **Vector Database**: Stores document embeddings for efficient semantic retrieval
 5. **LLM Integration**: Connects with OpenAI API to generate natural language responses
+6. **MongoDB**: Stores PDF sessions persistently for access across server restarts
 
 ## 🧠 How RAG Works
 
@@ -69,7 +73,7 @@ The Vector Database Connection ensures that the system can efficiently retrieve 
 - Anaconda or Miniconda
 - Python 11
 - OpenAI API key
-- MongoDB (optional, for persistent storage)
+- MongoDB (local installation or cloud)
 
 ### Installation Steps
 
@@ -99,7 +103,7 @@ Create a `.env` file in the root directory with the following variables:
 
 ```
 OPENAI_API_KEY=your_openai_api_key
-MONGO_CONNECTION_STR=your_mongodb_connection_string  # Optional
+MONGO_CONNECTION_STR=mongodb://localhost:27017
 ```
 
 5. **Run the application**
@@ -111,6 +115,69 @@ uvicorn main:app --reload
 6. **Access the application**
 
 Open your browser and navigate to `http://localhost:8000`
+
+## 🗄️ MongoDB Setup
+
+The application uses MongoDB to store PDF sessions persistently. This allows for sessions to be maintained even if the server restarts.
+
+### Setting Up Local MongoDB
+
+1. **Install MongoDB Community Edition**:
+   - Download from [MongoDB Download Center](https://www.mongodb.com/try/download/community)
+   - Follow the installation instructions for your operating system
+   - Make sure the MongoDB service is running
+
+2. **Connect to Local MongoDB**:
+   - The default connection string for local MongoDB is `mongodb://localhost:27017`
+   - Update your `.env` file with this connection string
+   - No authentication is required for local development setup
+
+3. **Install MongoDB Compass (Optional but recommended)**:
+   - MongoDB Compass is a GUI for MongoDB
+   - Download from [MongoDB Compass Download](https://www.mongodb.com/products/compass)
+   - Use it to visually inspect your database
+
+### Alternative: Using MongoDB Atlas (Cloud)
+
+If you prefer using MongoDB Atlas (cloud version):
+
+1. **Create a MongoDB Atlas account**:
+   - Sign up at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+   - Create a new cluster (the free tier is sufficient)
+
+2. **Set up network access**:
+   - Add your IP address to the IP Access List
+   - Or set it to allow access from anywhere (for development only)
+
+3. **Create a database user**:
+   - Create a user with read/write privileges for the database
+
+4. **Get your connection string**:
+   - Go to "Connect" > "Connect your application"
+   - Copy the connection string
+   - Replace `<password>` with your user's password
+   - Add this connection string to your `.env` file
+
+### Verifying MongoDB Setup
+
+To verify your MongoDB setup is working correctly:
+
+1. **Check via Application**:
+   - Start the application with `uvicorn main:app --reload`
+   - Access the `/api/db-status` endpoint in your browser:
+     `http://localhost:8000/api/db-status`
+   - You should see a status response indicating successful connection
+
+2. **Check via MongoDB Compass**:
+   - Connect to your MongoDB instance (local or Atlas)
+   - After uploading a PDF, refresh Compass
+   - You should see a `pdf_rag_db` database with a `sessions` collection
+   - Each document contains a `session_id` and `pdf_bytes` field
+
+3. **Testing Persistence**:
+   - Upload a PDF and use the chat functionality
+   - Stop and restart the application server
+   - Your chat session should still be available
 
 ## 📖 Usage Guide
 
@@ -144,6 +211,7 @@ PDF-RAG-Chatbot-System/
 ├── app/
 │   ├── __init__.py
 │   ├── config.py          # Configuration and environment variables
+│   ├── db.py              # MongoDB integration
 │   ├── rag.py             # RAG implementation
 │   └── routes.py          # API endpoints
 ├── frontend/
@@ -177,12 +245,30 @@ class PDFRAG:
         self.qa_chain = self.create_qa_chain(self.vectorstore)
 ```
 
+#### MongoDB Integration (`app/db.py`)
+
+Handles persistent storage of PDF sessions:
+- Connection to MongoDB (local or cloud)
+- Session storage and retrieval
+- Automatic fallback to in-memory storage if MongoDB fails
+- Error handling and logging
+
+```python
+class MongoDB:
+    def __init__(self):
+        # Connect to MongoDB
+        self.client = MongoClient(MONGO_CONNECTION_STR)
+        self.db = self.client.pdf_rag_db
+        self.sessions = self.db.sessions
+```
+
 #### API Routes (`app/routes.py`)
 
 Handles HTTP requests for:
 - PDF uploads
 - Chat interactions
 - Session management
+- Database status checks
 
 ```python
 @router.post("/upload")
@@ -192,6 +278,10 @@ async def upload_pdf(file: UploadFile = File(...)):
 @router.post("/chat")
 async def chat_with_pdf(request: ChatRequest):
     # Process chat request and return answer
+
+@router.get("/db-status")
+async def check_db_status():
+    # Check MongoDB connection status
 ```
 
 ### Frontend Components
@@ -222,13 +312,48 @@ The diagram illustrates the complete lifecycle of a user interaction:
 2. Browser sends the PDF to the FastAPI server via a POST request
 3. Server generates embeddings using OpenAI API
 4. Vectors are stored in the FAISS vector store
-5. A session is created and stored in memory (or database in production)
-6. Session ID is returned to the browser
+5. PDF bytes are stored in MongoDB for persistence
+6. A session ID is returned to the browser
 7. Browser notifies the user that the system is ready for chat
 8. User sends questions through the chat interface
 9. Relevant context is retrieved from the vector store
 10. The context and question are sent to OpenAI to generate an answer
 11. Answer is returned to the user through the chat interface
+
+## 🗄️ MongoDB Integration
+
+The MongoDB integration provides persistent storage for PDF sessions, allowing users to access their documents even after server restarts.
+
+### What's Stored in MongoDB
+
+Each document in the `sessions` collection contains:
+- `session_id`: A unique identifier for the session
+- `pdf_bytes`: Binary data of the uploaded PDF
+
+### MongoDB Workflow
+
+1. **Session Creation**:
+   - When a PDF is uploaded, a new session is created
+   - The raw PDF bytes are stored in MongoDB
+   - A session ID is generated and returned to the client
+
+2. **Session Retrieval**:
+   - When a user makes a query, the session ID is used to identify the document
+   - If the session is not in memory, it's loaded from MongoDB
+   - The PDFRAG object is recreated from the stored PDF bytes
+
+3. **Fallback Mechanism**:
+   - If MongoDB connection fails, the system falls back to in-memory storage
+   - This allows the application to continue functioning even without database access
+   - Users can still upload and query PDFs, but sessions won't persist after server restart
+
+### MongoDB Status Endpoint
+
+The `/api/db-status` endpoint provides information about the MongoDB connection:
+- Connection status (connected or fallback)
+- Active sessions count
+- Database name
+- Error messages if connection failed
 
 ## 🛡 Technologies Used
 
@@ -239,6 +364,7 @@ The diagram illustrates the complete lifecycle of a user interaction:
 - **OpenAI API**: For embeddings and LLM capabilities
 - **PyPDF2**: PDF processing library
 - **FAISS**: Similarity search library
+- **MongoDB**: Persistent storage for PDF sessions
 
 ### Frontend
 
