@@ -11,20 +11,6 @@ A simple web app that allows you to chat with your PDF documents using Retrieval
 - **Session Management**: Multiple document sessions with persistent storage
 - **MongoDB Integration**: Store sessions for persistence across server restarts
 
-## 📋 Table of Contents
-
-- [System Architecture](#-system-architecture)
-- [How RAG Works](#-how-rag-works)
-- [Setup Instructions](#-setup-instructions)
-- [MongoDB Setup](#-mongodb-setup)
-- [Usage Guide](#-usage-guide)
-- [Project Structure](#-project-structure)
-- [Key Components](#-key-components)
-- [Session Management](#-session-management)
-- [MongoDB Integration](#-mongodb-integration)
-- [Technologies Used](#-technologies-used)
-- [License](#-license)
-
 ## 🏗 System Architecture
 
 The system follows a modular architecture:
