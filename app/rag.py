@@ -1,9 +1,9 @@
 # app/rag.py
 import io
 from PyPDF2 import PdfReader
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI  # Updated imports
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.text_splitter import CharacterTextSplitter
-from langchain_community.vectorstores import FAISS  # Updated import
+from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 
 from app.config import OPENAI_API_KEY

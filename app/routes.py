@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Initialize MongoDB client - wrapped in a dependency function
-# This allows for better error handling during initialization
+# Initialize MongoDB client
 def get_db():
     """
     Dependency function for MongoDB.
@@ -105,7 +104,7 @@ async def chat_with_pdf(request: ChatRequest, db: MongoDB = Depends(get_db)):
         logger.error(f"Error during query: {e}")
         raise HTTPException(status_code=500, detail=f"Error during query: {str(e)}")
 
-# New endpoint to list active sessions
+# Route to list all active sessions
 @router.get("/sessions")
 async def list_sessions(db: MongoDB = Depends(get_db)):
     try:
@@ -118,7 +117,7 @@ async def list_sessions(db: MongoDB = Depends(get_db)):
         logger.error(f"Error listing sessions: {e}")
         raise HTTPException(status_code=500, detail=f"Error listing sessions: {str(e)}")
 
-# New endpoint to delete a session
+# Route to delete a session
 @router.delete("/session/{session_id}")
 async def delete_session(session_id: str, db: MongoDB = Depends(get_db)):
     try:
@@ -138,6 +137,7 @@ async def delete_session(session_id: str, db: MongoDB = Depends(get_db)):
         logger.error(f"Error deleting session: {e}")
         raise HTTPException(status_code=500, detail=f"Error deleting session: {str(e)}")
 
+# Route to check MongoDB connection status
 @router.get("/db-status")
 async def check_db_status(db: MongoDB = Depends(get_db)):
     """Check MongoDB connection status"""

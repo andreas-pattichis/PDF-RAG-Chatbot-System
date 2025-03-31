@@ -21,7 +21,6 @@ const sessionInfo = document.getElementById('sessionInfo');
 // Initialize the app
 function init() {
     // Event listeners
-    // We'll directly add click handler with all the event prevention needed
     uploadBtn.onclick = function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -43,7 +42,6 @@ function init() {
 
 // Setup drag and drop functionality
 function setupDragAndDrop() {
-    // Make sure dropzone is a label element wrapping the input in the HTML
     // Prevent default drag behaviors
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropzone.addEventListener(eventName, preventDefaults, false);

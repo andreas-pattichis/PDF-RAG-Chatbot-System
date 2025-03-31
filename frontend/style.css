@@ -445,7 +445,6 @@
     }
   }
   
-  /* Make this responsive for very small screens */
   @media (max-width: 480px) {
     header h1 {
       font-size: 1.4rem;
