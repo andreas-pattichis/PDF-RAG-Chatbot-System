@@ -2,7 +2,7 @@
 
 A simple web app that allows you to chat with your PDF documents using Retrieval Augmented Generation (RAG) technology. Upload any PDF and ask questions about its content to receive accurate, context-aware answers.
 
-<img src="https://github.com/user-attachments/assets/73e4a4ed-c8af-47b9-9d0b-6cf378b3a832" alt="RAG Reader Preview" width="580">
+<img src="https://github.com/user-attachments/assets/73e4a4ed-c8af-47b9-9d0b-6cf378b3a832" alt="RAG Reader Preview" width="650">
 
 ## 🚀 Features
 
@@ -69,7 +69,7 @@ uvicorn main:app --reload
 
 Retrieval Augmented Generation (RAG) combines information retrieval with text generation for more accurate, contextual responses.
 
-<img src="https://github.com/user-attachments/assets/c50d595b-febe-4797-8a65-36f97f97e244" alt="RAG Process Flow" width="550">
+<img src="https://github.com/user-attachments/assets/c50d595b-febe-4797-8a65-36f97f97e244" alt="RAG Process Flow" width="650">
 
 ### RAG Process Flow:
 
